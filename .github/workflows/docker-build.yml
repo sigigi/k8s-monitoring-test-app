@@ -23,4 +23,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ env.DOCKER_REGISTRY }}:latest
+        tags: "${{ vars.DOCKER_REGISTRY }}:latest"
