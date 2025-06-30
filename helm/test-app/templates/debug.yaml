@@ -1,8 +1,0 @@
-# templates/debug.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: debug-values
-data:
-  values: |
-    {{ toYaml .Values | indent 4 }}
