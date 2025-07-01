@@ -8,6 +8,10 @@ image:
 service:
   type: ClusterIP
   port: 3000
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3000"
+    prometheus.io/path: "/metrics"
 
 resources:
   requests:
@@ -16,3 +20,8 @@ resources:
   limits:
     cpu: 200m
     memory: 256Mi
+
+podLabels:
+  app.kubernetes.io/name: test-app
+  app.kubernetes.io/instance: test-app
+  prometheus: enabled
