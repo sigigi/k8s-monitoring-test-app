@@ -48,7 +48,7 @@ const { HttpInstrumentation } = require('@opentelemetry/instrumentation-http');
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
 
 const exporter = new OTLPTraceExporter({
-    url: 'http://tempo:4318/v1/traces',
+    url: 'http://tempo-distributor.monitoring.svc.cluster.local:4318/v1/traces',
     // headers: {
     //   foo: 'bar'
     // },
