@@ -14,7 +14,7 @@ collectDefaultMetrics();
 app.get('/', (req, res) => {
     counter.inc();
     console.log('Received request at /');
-    res.send('Hello from test-app!');
+    res.send('Hello Hello from test-app!');
 });
 
 app.get('/metrics', async (req, res) => {
