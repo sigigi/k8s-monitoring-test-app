@@ -1,8 +1,9 @@
+require('./tracing');
+
 const express = require('express');
+const axios = require('axios');
 const app = express();
 const port = 3000;
-
-require('./tracing');
 
 const client = require('prom-client');
 const register = client.register;
@@ -19,6 +20,19 @@ app.get('/', (req, res) => {
 app.get('/metrics', async (req, res) => {
     res.set('Content-Type', client.register.contentType);
     res.end(await client.register.metrics());
+});
+
+app.get('/ping', async (req, res) => {
+    try {
+        const response = await axios.get('https://httpbin.org/get');
+        res.json({
+            message: 'pong',
+            external: response.data.url,
+        });
+    } catch (err) {
+        console.error('❌ 외부 요청 실패:', err.message);
+        res.status(500).send('Error during external request');
+    }
 });
 
 app.listen(port, () => {
