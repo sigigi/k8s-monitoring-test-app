@@ -64,7 +64,13 @@ const provider = new NodeTracerProvider({
     ]
 });
 provider.register();
-
+registerInstrumentations({
+    instrumentations: [
+        new HttpInstrumentation(),         // HTTP 계층 자동 계측
+        new ExpressInstrumentation(),      // Express 라우트 자동 계측
+        // new AxiosInstrumentation(),     // 제거됨
+    ],
+});
 
 
 console.log('✅ OpenTelemetry 트레이싱 초기화 완료');
