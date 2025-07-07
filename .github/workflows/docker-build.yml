@@ -77,8 +77,8 @@ jobs:
       - name: Set Helm image tag
         uses: Nextdoor/helm-set-image-tag-action@main
         with:
-          file: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
-          tag: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+          values_files: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
+          tag_value: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
           commit_branch: main
           commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
           commit_and_push: true
@@ -120,8 +120,8 @@ jobs:
       - name: Set Helm image tag
         uses: Nextdoor/helm-set-image-tag-action@main
         with:
-          file: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
-          tag: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+          values_files: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
+          tag_value: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
           commit_branch: main
           commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
           commit_and_push: true
@@ -163,8 +163,8 @@ jobs:
       - name: Set Helm image tag
         uses: Nextdoor/helm-set-image-tag-action@main
         with:
-          file: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
-          tag: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+          values_files: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
+          tag_value: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
           commit_branch: main
           commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
           commit_and_push: true
