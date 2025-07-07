@@ -23,7 +23,7 @@ const exporter = new OTLPTraceExporter({
 
 const provider = new NodeTracerProvider({
     resource: resourceFromAttributes({
-        [ATTR_SERVICE_NAME]: 'test-app',
+        [ATTR_SERVICE_NAME]: 'sub2-app',
     }),
     spanProcessors: [
         new SimpleSpanProcessor(exporter),
