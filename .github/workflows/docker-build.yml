@@ -78,15 +78,6 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: "${{ vars.DOCKER_REGISTRY }}:${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-      
-      # - name: Set Helm image tag
-      #   uses: Nextdoor/helm-set-image-tag-action@main
-      #   with:
-      #     values_files: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
-      #     tag_value: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-      #     commit_branch: main
-      #     commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-      #     # commit_and_push: true
 
   build-sub1-app:
     needs: detect-changes
@@ -123,16 +114,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: "${{ vars.DOCKER_REGISTRY }}:${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-      
-      # - name: Set Helm image tag
-      #   uses: Nextdoor/helm-set-image-tag-action@main
-      #   with:
-      #     values_files: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
-      #     tag_value: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-      #     commit_branch: main
-      #     commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-      #     # commit_and_push: true
-
+     
   build-sub2-app:
     needs: detect-changes
     if: needs.detect-changes.outputs.sub2_app == 'true' || needs.detect-changes.outputs.common == 'true'
@@ -168,18 +150,9 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: "${{ vars.DOCKER_REGISTRY }}:${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-      
-      # - name: Set Helm image tag
-      #   uses: Nextdoor/helm-set-image-tag-action@main
-      #   with:
-      #     values_files: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
-      #     tag_value: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-      #     commit_branch: main
-      #     commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-      #     # commit_and_push: true
 
   update-values:
-    needs: [build-main-app, build-sub1-app, build-sub2-app]
+    needs: [build-main-app, build-sub1-app, build-sub2-app, detect-changes]
     runs-on: ubuntu-latest
     if: |
       needs.build-main-app.outputs.changed == 'true' ||
@@ -189,14 +162,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # - name: Set Helm image tag
-      #   uses: Nextdoor/helm-set-image-tag-action@main
-      #   with:
-      #     values_files: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
-      #     tag_value: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-      #     commit_branch: main
-      #     commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-      #     # commit_and_push: true
       - name: Install yq
         run: |
           sudo wget -qO /usr/local/bin/yq \
