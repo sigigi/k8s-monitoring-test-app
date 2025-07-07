@@ -84,7 +84,7 @@ jobs:
           tag_value: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
           commit_branch: main
           commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-          commit_and_push: true
+          # commit_and_push: true
 
   build-sub1-app:
     needs: detect-changes
@@ -127,7 +127,7 @@ jobs:
           tag_value: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
           commit_branch: main
           commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-          commit_and_push: true
+          # commit_and_push: true
 
   build-sub2-app:
     needs: detect-changes
@@ -170,4 +170,4 @@ jobs:
           tag_value: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
           commit_branch: main
           commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-          commit_and_push: true
+          # commit_and_push: true
