@@ -75,18 +75,13 @@ jobs:
           tags: "${{ vars.DOCKER_REGISTRY }}:${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
       
       - name: Set Helm image tag
-        uses: Nextdoor/helm-set-image-tag-action@v1
+        uses: Nextdoor/helm-set-image-tag-action@main
         with:
           file: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
           tag: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-
-      - name: Commit & Push values.yaml
-        run: |
-          git config user.name  "github-actions"
-          git config user.email "github-actions@github.com"
-          git add apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
-          git commit -m "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}" || echo "No changes"
-          git push origin HEAD:${{ github.ref }}
+          commit_branch: main
+          commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+          commit_and_push: true
 
   build-sub1-app:
     needs: detect-changes
@@ -123,18 +118,13 @@ jobs:
           tags: "${{ vars.DOCKER_REGISTRY }}:${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
       
       - name: Set Helm image tag
-        uses: Nextdoor/helm-set-image-tag-action@v1
+        uses: Nextdoor/helm-set-image-tag-action@main
         with:
           file: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
           tag: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-
-      - name: Commit & Push values.yaml
-        run: |
-          git config user.name  "github-actions"
-          git config user.email "github-actions@github.com"
-          git add apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
-          git commit -m "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}" || echo "No changes"
-          git push origin HEAD:${{ github.ref }}
+          commit_branch: main
+          commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+          commit_and_push: true
 
   build-sub2-app:
     needs: detect-changes
@@ -171,15 +161,10 @@ jobs:
           tags: "${{ vars.DOCKER_REGISTRY }}:${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
       
       - name: Set Helm image tag
-        uses: Nextdoor/helm-set-image-tag-action@v1
+        uses: Nextdoor/helm-set-image-tag-action@main
         with:
           file: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
           tag: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
-
-      - name: Commit & Push values.yaml
-        run: |
-          git config user.name  "github-actions"
-          git config user.email "github-actions@github.com"
-          git add apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
-          git commit -m "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}" || echo "No changes"
-          git push origin HEAD:${{ github.ref }}
+          commit_branch: main
+          commit_message: "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+          commit_and_push: true
