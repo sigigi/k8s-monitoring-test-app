@@ -17,6 +17,10 @@ app.get('/', (req, res) => {
     res.send('Hello Hello from test-app!');
 });
 
+app.get('/work', async (req, res) => {
+    const resp = await axios.get('http://sub2-app.project-test-app.svc.cluster.local:3000/task');
+    res.send(`sub1-app -> ${resp.data}`);
+});
 app.get('/metrics', async (req, res) => {
     res.set('Content-Type', client.register.contentType);
     res.end(await client.register.metrics());

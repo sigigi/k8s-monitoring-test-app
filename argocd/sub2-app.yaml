@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: test-app
+  name: sub2-app
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://github.com/sigigi/k8s-monitoring-test-app.git'
     targetRevision: HEAD
-    path: helm/test-app
+    path: apps/sub2-app/helm/sub2-app
     helm:
       valueFiles:
         - values.yaml

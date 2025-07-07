@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: sigigi/k8s-monitoring-test-app
-  tag: latest
+  tag: sub2-app-latest
   pullPolicy: IfNotPresent
 
 service:
@@ -22,6 +22,6 @@ resources:
     memory: 256Mi
 
 podLabels:
-  app.kubernetes.io/name: test-app
-  app.kubernetes.io/instance: test-app
+  app.kubernetes.io/name: sub2-app
+  app.kubernetes.io/instance: sub2-app
   prometheus: enabled

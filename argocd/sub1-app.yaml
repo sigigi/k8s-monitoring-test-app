@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sub1-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/sigigi/k8s-monitoring-test-app.git'
+    targetRevision: HEAD
+    path: apps/sub1-app/helm/sub1-app
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: project-test-app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
