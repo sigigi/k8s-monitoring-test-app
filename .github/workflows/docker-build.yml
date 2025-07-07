@@ -11,33 +11,33 @@ jobs:
       main_app: ${{ steps.filter.outputs.main_app }}
       sub1_app: ${{ steps.filter.outputs.sub1_app }}
       sub2_app: ${{ steps.filter.outputs.sub2_app }}
+      common: ${{ steps.filter.outputs.common }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Detect changed apps
-      id: filter
-      uses: dorny/paths-filter@v2
-      with:
-        filters: |
-          main_app:
-            - 'apps/main-app/**'
-            - 'argocd/main-app.yaml'
-          sub1_app:
-            - 'apps/sub1-app/**'
-            - 'argocd/sub1-app.yaml'
-          sub2_app:
-            - 'apps/sub2-app/**'
-            - 'argocd/sub2-app.yaml'
-          common:
-            - 'Dockerfile'
-            - '.github/**'
-            - 'package.json'
-
+      - name: Detect changed apps
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            main_app:
+              - 'apps/main-app/**'
+              - 'argocd/main-app.yaml'
+            sub1_app:
+              - 'apps/sub1-app/**'
+              - 'argocd/sub1-app.yaml'
+            sub2_app:
+              - 'apps/sub2-app/**'
+              - 'argocd/sub2-app.yaml'
+            common:
+              - 'Dockerfile'
+              - '.github/**'
+              - 'package.json'
   build-main-app:
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.main_app == 'true' || needs.detect-changes.outputs.common == 'true' }}
+    if: needs.detect-changes.outputs.main_app == 'true' || needs.detect-changes.outputs.common == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -59,7 +59,7 @@ jobs:
 
   build-sub1-app:
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.sub1_app == 'true' || needs.detect-changes.outputs.common == 'true' }}
+    if: needs.detect-changes.outputs.sub1_app == 'true' || needs.detect-changes.outputs.common == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -81,7 +81,7 @@ jobs:
 
   build-sub2-app:
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.sub2_app == 'true' || needs.detect-changes.outputs.common == 'true' }}
+    if: needs.detect-changes.outputs.sub2_app == 'true' || needs.detect-changes.outputs.common == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
