@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: test-app
+  name: sub2-app
 spec:
   selector:
-    app: test-app
+    app: sub2-app
   ports:
     - protocol: TCP
       port: 3000

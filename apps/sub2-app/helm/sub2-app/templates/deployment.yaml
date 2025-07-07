@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-app
+  name: sub2-app
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: test-app
+      app: sub2-app
   template:
     metadata:
       labels:
-        app: test-app
+        app: sub2-app
     spec:
       containers:
-        - name: test-app
+        - name: sub2-app
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - name: http
