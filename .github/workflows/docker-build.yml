@@ -12,10 +12,15 @@ jobs:
       sub1_app: ${{ steps.filter.outputs.sub1_app }}
       sub2_app: ${{ steps.filter.outputs.sub2_app }}
       common: ${{ steps.filter.outputs.common }}
+      SHA: ${{ steps.vars.outputs.SHA }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Get short SHA
+        id: vars
+        run: echo "SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Detect changed apps
         id: filter
@@ -39,19 +44,21 @@ jobs:
     needs: detect-changes
     if: needs.detect-changes.outputs.main_app == 'true' || needs.detect-changes.outputs.common == 'true'
     runs-on: ubuntu-latest
+    env:
+      APP: main-app
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Copy shared package.json into app directory
         run: |
-          cp package*.json apps/main-app/
+          cp package*.json apps/${{ env.APP }}/
 
       - name: Replace package.json name
         run: |
-          jq --arg name "main-app" '.name = $name' \
-             apps/main-app/package.json > apps/main-app/package.tmp.json
-          mv apps/main-app/package.tmp.json apps/main-app/package.json
+          jq --arg name "${{ env.APP }}" '.name = $name' \
+             apps/${{ env.APP }}/package.json > apps/${{ env.APP }}/package.tmp.json
+          mv apps/${{ env.APP }}/package.tmp.json apps/${{ env.APP }}/package.json
           
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -62,28 +69,44 @@ jobs:
       - name: Build and push main-app
         uses: docker/build-push-action@v4
         with:
-          context: ./apps/main-app
+          context: ./apps/${{ env.APP }}
           file: ./Dockerfile
           push: true
-          tags: "${{ vars.DOCKER_REGISTRY }}:main-app-latest"
+          tags: "${{ vars.DOCKER_REGISTRY }}:${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+      
+      - name: Set Helm image tag
+        uses: Nextdoor/helm-set-image-tag-action@v1
+        with:
+          file: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
+          tag: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+
+      - name: Commit & Push values.yaml
+        run: |
+          git config user.name  "github-actions"
+          git config user.email "github-actions@github.com"
+          git add apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
+          git commit -m "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}" || echo "No changes"
+          git push origin HEAD:${{ github.ref }}
 
   build-sub1-app:
     needs: detect-changes
     if: needs.detect-changes.outputs.sub1_app == 'true' || needs.detect-changes.outputs.common == 'true'
     runs-on: ubuntu-latest
+    env:
+      APP: sub1-app
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Copy shared package.json into app directory
         run: |
-          cp package*.json apps/sub1-app/
+          cp package*.json apps/${{ env.APP }}/
 
       - name: Replace package.json name
         run: |
-          jq --arg name "sub1-app" '.name = $name' \
-             apps/sub1-app/package.json > apps/sub1-app/package.tmp.json
-          mv apps/sub1-app/package.tmp.json apps/sub1-app/package.json
+          jq --arg name "${{ env.APP }}" '.name = $name' \
+             apps/${{ env.APP }}/package.json > apps/${{ env.APP }}/package.tmp.json
+          mv apps/${{ env.APP }}/package.tmp.json apps/${{ env.APP }}/package.json
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -94,27 +117,43 @@ jobs:
       - name: Build and push sub1-app
         uses: docker/build-push-action@v4
         with:
-          context: ./apps/sub1-app
+          context: ./apps/${{ env.APP }}
           file: ./Dockerfile
           push: true
-          tags: "${{ vars.DOCKER_REGISTRY }}:sub1-app-latest"
+          tags: "${{ vars.DOCKER_REGISTRY }}:${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+      
+      - name: Set Helm image tag
+        uses: Nextdoor/helm-set-image-tag-action@v1
+        with:
+          file: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
+          tag: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+
+      - name: Commit & Push values.yaml
+        run: |
+          git config user.name  "github-actions"
+          git config user.email "github-actions@github.com"
+          git add apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
+          git commit -m "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}" || echo "No changes"
+          git push origin HEAD:${{ github.ref }}
 
   build-sub2-app:
     needs: detect-changes
     if: needs.detect-changes.outputs.sub2_app == 'true' || needs.detect-changes.outputs.common == 'true'
     runs-on: ubuntu-latest
+    env:
+      APP: sub2-app
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Copy shared package.json into app directory
         run: |
-          cp package*.json apps/sub2-app/
+          cp package*.json apps/${{ env.APP }}/
 
       - name: Replace package.json name
         run: |
-          jq --arg name "sub2-app" '.name = $name' \
-             apps/sub2-app/package.json > apps/sub2-app/package.tmp.json
+          jq --arg name "${{ env.APP }}" '.name = $name' \
+             apps/${{ env.APP }}/package.json > apps/${{ env.APP }}/package.tmp.json
           mv apps/sub2-app/package.tmp.json apps/sub2-app/package.json
 
       - name: Log in to Docker Hub
@@ -126,7 +165,21 @@ jobs:
       - name: Build and push sub2-app
         uses: docker/build-push-action@v4
         with:
-          context: ./apps/sub2-app
+          context: ./apps/${{ env.APP }}
           file: ./Dockerfile
           push: true
-          tags: "${{ vars.DOCKER_REGISTRY }}:sub2-app-latest"
+          tags: "${{ vars.DOCKER_REGISTRY }}:${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+      
+      - name: Set Helm image tag
+        uses: Nextdoor/helm-set-image-tag-action@v1
+        with:
+          file: apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
+          tag: "${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}"
+
+      - name: Commit & Push values.yaml
+        run: |
+          git config user.name  "github-actions"
+          git config user.email "github-actions@github.com"
+          git add apps/${{ env.APP }}/helm/${{ env.APP }}/values.yaml
+          git commit -m "chore(ci): ${{ env.APP }} image → ${{ env.APP }}-${{ needs.detect-changes.outputs.SHA }}" || echo "No changes"
+          git push origin HEAD:${{ github.ref }}
