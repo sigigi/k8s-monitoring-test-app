@@ -11,6 +11,11 @@ for APP in "${APPS[@]}"; do
 
   cp package*.json apps/$APP/
 
+  # package.json 내 name 필드 앱 이름으로 치환
+  jq --arg name "$APP" '.name = $name' \
+    apps/$APP/package.json > apps/$APP/package.tmp.json && \
+    mv apps/$APP/package.tmp.json apps/$APP/package.json
+
   docker build -f Dockerfile -t $APP:latest ./apps/$APP
 
   echo "✅ $APP build complete!"

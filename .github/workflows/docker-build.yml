@@ -47,6 +47,12 @@ jobs:
         run: |
           cp package*.json apps/main-app/
 
+      - name: Replace package.json name
+        run: |
+          jq --arg name "main-app" '.name = $name' \
+             apps/main-app/package.json > apps/main-app/package.tmp.json
+          mv apps/main-app/package.tmp.json apps/main-app/package.json
+          
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -73,6 +79,12 @@ jobs:
         run: |
           cp package*.json apps/sub1-app/
 
+      - name: Replace package.json name
+        run: |
+          jq --arg name "sub1-app" '.name = $name' \
+             apps/sub1-app/package.json > apps/sub1-app/package.tmp.json
+          mv apps/sub1-app/package.tmp.json apps/sub1-app/package.json
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -98,6 +110,12 @@ jobs:
       - name: Copy shared package.json into app directory
         run: |
           cp package*.json apps/sub2-app/
+
+      - name: Replace package.json name
+        run: |
+          jq --arg name "sub2-app" '.name = $name' \
+             apps/sub2-app/package.json > apps/sub2-app/package.tmp.json
+          mv apps/sub2-app/package.tmp.json apps/sub2-app/package.json
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
