@@ -46,6 +46,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./apps/main-app
+          dockerfile: ./Dockerfile
           push: true
           tags: "${{ vars.DOCKER_REGISTRY }}/main-app:main-app-latest"
 
@@ -67,6 +68,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./apps/sub1-app
+          dockerfile: ./Dockerfile
           push: true
           tags: "${{ vars.DOCKER_REGISTRY }}/sub1-app:sub1-app-latest"
 
@@ -88,5 +90,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./apps/sub2-app
+          dockerfile: ./Dockerfile
           push: true
           tags: "${{ vars.DOCKER_REGISTRY }}/sub2-app:sub2-app-latest"
