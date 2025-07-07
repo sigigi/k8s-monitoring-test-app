@@ -1,10 +1,8 @@
 replicaCount: 1
-
 image:
   repository: sigigi/k8s-monitoring-test-app
-  tag: main-app-latest
+  tag: main-app-354867f
   pullPolicy: IfNotPresent
-
 service:
   type: ClusterIP
   port: 3000
@@ -12,7 +10,6 @@ service:
     prometheus.io/scrape: "true"
     prometheus.io/port: "3000"
     prometheus.io/path: "/metrics"
-
 resources:
   requests:
     cpu: 100m
@@ -20,7 +17,6 @@ resources:
   limits:
     cpu: 200m
     memory: 256Mi
-
 podLabels:
   app.kubernetes.io/name: main-app
   app.kubernetes.io/instance: main-app
