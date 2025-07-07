@@ -59,7 +59,7 @@ jobs:
           context: ./apps/main-app
           file: ./Dockerfile
           push: true
-          tags: "${{ vars.DOCKER_REGISTRY }}/main-app:main-app-latest"
+          tags: "${{ vars.DOCKER_REGISTRY }}:main-app-latest"
 
   build-sub1-app:
     needs: detect-changes
@@ -85,7 +85,7 @@ jobs:
           context: ./apps/sub1-app
           file: ./Dockerfile
           push: true
-          tags: "${{ vars.DOCKER_REGISTRY }}/sub1-app:sub1-app-latest"
+          tags: "${{ vars.DOCKER_REGISTRY }}:sub1-app-latest"
 
   build-sub2-app:
     needs: detect-changes
@@ -111,4 +111,4 @@ jobs:
           context: ./apps/sub2-app
           file: ./Dockerfile
           push: true
-          tags: "${{ vars.DOCKER_REGISTRY }}/sub2-app:sub2-app-latest"
+          tags: "${{ vars.DOCKER_REGISTRY }}:sub2-app-latest"
